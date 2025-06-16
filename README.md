@@ -70,6 +70,8 @@ npm start
 
 5. Run Kafka-style Simulator
 python backend/kafka-simulator/producer.py
+
+
 🧪 Risk Alert Rules
 delete → adds +3 risk points
 download → +1
