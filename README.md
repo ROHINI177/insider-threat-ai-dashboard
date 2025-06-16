@@ -77,5 +77,5 @@ file_size > 750KB → triggers alert
 Top 3 risky events shown in real-time
 
 🙌 Author
-Your Name
+Rohini Sonawane
 [LinkedIn](https://www.linkedin.com/in/rohini-sonawane-364b54301/) |(github)https://github.com/ROHINI177/insider-threat-ai-dashboard/edit/main/README.md
