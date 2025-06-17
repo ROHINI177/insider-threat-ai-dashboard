@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { LockKeyhole } from "lucide-react"; // Optional icon
 
 const Login = ({ onLogin }) => {
   const [username, setUsername] = useState("");
@@ -15,29 +16,39 @@ const Login = ({ onLogin }) => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-200">
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-tr from-gray-200 via-gray-300 to-gray-400">
       <form
         onSubmit={handleSubmit}
-        className="bg-white p-8 rounded-lg shadow-md w-96"
+        className="bg-white p-10 rounded-2xl shadow-xl w-[350px] animate-fade-in"
       >
-        <h2 className="text-2xl font-bold mb-6 text-center text-gray-700">Admin Login</h2>
-        <input
-          type="text"
-          placeholder="Username"
-          className="w-full mb-4 px-4 py-2 border rounded"
-          value={username}
-          onChange={(e) => setUsername(e.target.value)}
-        />
-        <input
-          type="password"
-          placeholder="Password"
-          className="w-full mb-4 px-4 py-2 border rounded"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-        />
+        {/* Header */}
+        <div className="flex items-center justify-center mb-6">
+          <LockKeyhole className="w-7 h-7 text-blue-600 mr-2" />
+          <h2 className="text-2xl font-bold text-gray-800">Admin Login</h2>
+        </div>
+
+        {/* Inputs */}
+        <div className="space-y-4">
+          <input
+            type="text"
+            placeholder="Username"
+            className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400 transition"
+            value={username}
+            onChange={(e) => setUsername(e.target.value)}
+          />
+          <input
+            type="password"
+            placeholder="Password"
+            className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400 transition"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+          />
+        </div>
+
+        {/* Submit */}
         <button
           type="submit"
-          className="w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700"
+          className="mt-6 w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 rounded-md transition"
         >
           Log In
         </button>
@@ -47,3 +58,14 @@ const Login = ({ onLogin }) => {
 };
 
 export default Login;
+extend: {
+  animation: {
+    'fade-in': 'fadeIn 0.4s ease-out both',
+  },
+  keyframes: {
+    fadeIn: {
+      from: { opacity: 0, transform: 'translateY(10px)' },
+      to: { opacity: 1, transform: 'translateY(0)' },
+    },
+  },
+}
