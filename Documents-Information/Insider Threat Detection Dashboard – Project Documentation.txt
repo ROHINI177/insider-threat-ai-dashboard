@@ -1,0 +1,193 @@
+🛡️ Insider Threat Detection Dashboard – Project Documentation
+📌 Project Overview
+Goal: Build a real-time dashboard to monitor and visualize risky user behaviors (e.g., unauthorized deletions or large file downloads) that may indicate insider threats.
+
+This system simulates logs, identifies risky actions based on rules, displays alerts, and visualizes user risk scores.
+
+
+🧠 Idea & Objectives
+🎯 Primary Objectives
+Simulate user behavior logs using a Kafka-style Python script.
+
+Build a backend API using FastAPI to receive and store logs.
+
+Use PostgreSQL as the database to store all behavioral logs.
+
+Create a React-based dashboard:
+
+Display real-time logs.
+
+Highlight risky behaviors (delete actions or file size > 750KB).
+
+Visualize risk scores using D3.js bar charts.
+
+Provide admin login functionality.
+
+
+
+
+
+
+
+⚙️ Tech Stack
+Component	Tech Used
+Frontend	React + Tailwind CSS + D3.js
+Backend	FastAPI
+Database	PostgreSQL
+Log Simulator	Python
+Deployment	Localhost
+
+
+
+
+
+
+
+🧩 Project Structure
+
+insider-threat-ai-dashboard/
+├── backend/
+│   └── main.py
+├── frontend/
+│   ├── src/
+│   │   ├── App.js
+│   │   ├── Login.js
+│   │   ├── RiskAlert.js
+│   │   └── RiskChart.js
+├── kafka-simulator/
+│   └── producer.py
+
+
+
+
+
+🔧 Functional Modules
+1. Kafka Simulator (producer.py)
+Sends a log every 3 seconds with:
+
+Action: "delete"
+
+File size: 1000KB
+
+Marked as risky
+
+2. Backend API (main.py)
+Uses FastAPI with PostgreSQL.
+
+Endpoint: /api/behavior
+
+Accepts POST requests to store logs.
+
+CORS enabled for frontend access.
+
+SQLAlchemy models define the DB table behavior_logs.
+
+3. Frontend Dashboard (App.js)
+Admin Login (hardcoded: admin / admin123).
+
+Displays:
+
+Live behavior logs (fetched every 10s).
+
+Risk alerts 🔥 for suspicious actions.
+
+D3.js chart showing risk scores by user.
+
+4. Risk Alert Component (RiskAlert.js)
+Shows a red banner for logs that are suspicious.
+
+5. D3 Risk Chart (RiskChart.js)
+Visualizes risk score per user:
+
+>=10 → 🔴 High Risk
+
+5–9 → 🟡 Medium Risk
+
+<5 → 🟢 Low Risk
+
+
+
+
+🧪 Run & Demo Instructions
+▶️ 1. Start PostgreSQL
+Ensure your insider_db database is created and PostgreSQL is running on port 5432.
+
+▶️ 2. Start Backend
+
+uvicorn backend.main:app --reload
+
+▶️ 3. Start Frontend
+
+cd frontend
+npm start
+
+▶️ 4. Run Log Simulator
+
+python kafka-simulator/producer.py
+
+
+🧪 Verify
+Go to http://localhost:3000
+
+Login as admin.
+
+See:
+
+Log table updating in real time.
+
+Red 🔥 alerts for risky actions.
+
+Bar chart of user risk scores.
+
+
+🧠 Logic Behind Risk Scoring
+Every user log adds to the user's score:
+
+Normal action: +1
+
+delete action: +3
+
+D3 calculates score and color-codes:
+
+Green: Safe
+
+Yellow: Watchlist
+
+Red: High-risk
+
+
+
+🧼 Reset Database (Optional)
+To clear old logs:
+
+
+-- In psql:
+DROP TABLE IF EXISTS behavior_logs;
+Then restart backend to recreate the table.
+
+
+📦 Future Enhancements
+Real authentication & RBAC.
+
+Risk scoring with ML (e.g., LSTM or PyOD).
+
+Alert email/push integration.
+
+Audit trails and reports.
+
+Docker/Kubernetes deployment on AWS.
+
+
+
+🧾 Summary
+🔒 Secure admin-only access
+
+🧠 Smart risk detection logic
+
+📊 D3 visual feedback
+
+📡 Real-time updates
+
+🐍 Kafka-style Python simulator
+
+🧩 Modular codebase
