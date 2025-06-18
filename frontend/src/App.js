@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import RiskChart from "./RiskChart";
 import Login from "./Login";
 import RiskAlert from "./RiskAlert";
-import { LogOut } from "lucide-react";
+import { LogOut, Trash2 } from "lucide-react";
 
 function App() {
   const [logs, setLogs] = useState([]);
@@ -11,14 +11,16 @@ function App() {
     localStorage.getItem("isAuthenticated") === "true"
   );
 
+  // 🔁 Fetch logs
   useEffect(() => {
     if (!isAuthenticated) return;
 
     const fetchLogs = async () => {
       try {
-        const res = await fetch("https://insider-threat-ai-dashboard.onrender.com/api/behavior");
-        const data = await res.json(); // ✅ Fix: parse the JSON response
-
+        const res = await fetch(
+          `${process.env.REACT_APP_API_URL}/api/behavior`
+        );
+        const data = await res.json();
         const reversed = data.reverse();
         setLogs(reversed);
 
@@ -36,6 +38,22 @@ function App() {
     const interval = setInterval(fetchLogs, 3000);
     return () => clearInterval(interval);
   }, [isAuthenticated]);
+
+  // 🧹 Clear logs
+  const clearLogs = async () => {
+    try {
+      const res = await fetch(
+        `${process.env.REACT_APP_API_URL}/api/behavior/clear`,
+        { method: "DELETE" }
+      );
+      const data = await res.json();
+      console.log(data);
+      setLogs([]);
+      setAlerts([]);
+    } catch (error) {
+      console.error("❌ Failed to clear logs:", error);
+    }
+  };
 
   if (!isAuthenticated) {
     return <Login onLogin={() => setIsAuthenticated(true)} />;
@@ -57,19 +75,28 @@ function App() {
         <h1 className="text-4xl font-bold text-gray-800 tracking-tight">
           🧠 Insider Threat Dashboard
         </h1>
-        <button
-          onClick={() => {
-            localStorage.removeItem("isAuthenticated");
-            setIsAuthenticated(false);
-          }}
-          className="flex items-center gap-2 bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-md transition-shadow shadow-sm hover:shadow-md"
-        >
-          <LogOut className="w-4 h-4" />
-          Logout
-        </button>
+        <div className="flex gap-4">
+          <button
+            onClick={clearLogs}
+            className="flex items-center gap-2 bg-yellow-500 hover:bg-yellow-600 text-white px-4 py-2 rounded-md transition-shadow shadow-sm hover:shadow-md"
+          >
+            <Trash2 className="w-4 h-4" />
+            Clear Logs
+          </button>
+          <button
+            onClick={() => {
+              localStorage.removeItem("isAuthenticated");
+              setIsAuthenticated(false);
+            }}
+            className="flex items-center gap-2 bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-md transition-shadow shadow-sm hover:shadow-md"
+          >
+            <LogOut className="w-4 h-4" />
+            Logout
+          </button>
+        </div>
       </div>
 
-      {/* User Logs Table */}
+      {/* Logs Table */}
       <div className="bg-white rounded-lg shadow p-4 overflow-x-auto mb-10">
         <h2 className="text-2xl font-semibold text-gray-700 mb-4">
           User Behavior Logs
