@@ -12,6 +12,7 @@ const Login = ({ onLogin }) => {
       onLogin();
     } else {
       alert("Invalid credentials");
+      
     }
   };
 
