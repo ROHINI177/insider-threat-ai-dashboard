@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import RiskChart from "./RiskChart";
 import Login from "./Login";
 import RiskAlert from "./RiskAlert";
-import { LogOut } from "lucide-react"; // Optional icon
+import { LogOut } from "lucide-react";
 
 function App() {
   const [logs, setLogs] = useState([]);
@@ -16,16 +16,15 @@ function App() {
 
     const fetchLogs = async () => {
       try {
-        const res = await fetch("http://localhost:8000/api/behavior");
-        const data = await res.json();
+        const res = await fetch("https://insider-threat-ai-dashboard.onrender.com/api/behavior");
+        const data = await res.json(); // ✅ Fix: parse the JSON response
+
         const reversed = data.reverse();
         setLogs(reversed);
 
-        // Detect risky logs
         const risky = reversed.filter(
           (log) => log.action === "delete" || log.file_size > 750
         );
-
         const lastThree = risky.slice(0, 3);
         setAlerts(lastThree);
       } catch (error) {
@@ -94,7 +93,6 @@ function App() {
                 } transition-all duration-150 hover:bg-blue-50`}
               >
                 <td className="py-2 px-4 border font-medium">{log.user_id}</td>
-
                 <td className="py-2 px-4 border">
                   <span
                     className={`inline-block px-2 py-1 rounded-full text-xs font-semibold ${
@@ -108,7 +106,6 @@ function App() {
                     {log.action}
                   </span>
                 </td>
-
                 <td className="py-2 px-4 border text-gray-600">
                   {new Date(log.timestamp).toLocaleString("en-IN", {
                     day: "2-digit",
@@ -118,12 +115,12 @@ function App() {
                     minute: "2-digit",
                   })}
                 </td>
-
                 <td className="py-2 px-4 border text-right tabular-nums">
                   {log.file_size} <span className="text-gray-400">KB</span>
                 </td>
-
-                <td className="py-2 px-4 border font-mono text-sm">{log.ip_address}</td>
+                <td className="py-2 px-4 border font-mono text-sm">
+                  {log.ip_address}
+                </td>
               </tr>
             ))}
           </tbody>

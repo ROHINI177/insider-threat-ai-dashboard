@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { LockKeyhole } from "lucide-react"; // Optional icon
+import { LockKeyhole } from "lucide-react";
 
 const Login = ({ onLogin }) => {
   const [username, setUsername] = useState("");
@@ -58,14 +58,3 @@ const Login = ({ onLogin }) => {
 };
 
 export default Login;
-extend: {
-  animation: {
-    'fade-in': 'fadeIn 0.4s ease-out both',
-  },
-  keyframes: {
-    fadeIn: {
-      from: { opacity: 0, transform: 'translateY(10px)' },
-      to: { opacity: 1, transform: 'translateY(0)' },
-    },
-  },
-}

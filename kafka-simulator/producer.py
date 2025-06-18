@@ -1,8 +1,11 @@
 import time
 import requests
 from datetime import datetime, timezone
+import os
 
-API_ENDPOINT = "http://localhost:8000/api/behavior"
+# ✅ Use environment variable if available, else fallback to localhost
+API_ENDPOINT = "https://insider-threat-ai-dashboard.onrender.com/api/behavior"
+
 
 def send_log():
     log = {

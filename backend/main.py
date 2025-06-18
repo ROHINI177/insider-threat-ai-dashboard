@@ -10,22 +10,28 @@ import os
 # ✅ Load .env from current directory
 load_dotenv(dotenv_path=os.path.join(os.path.dirname(__file__), ".env"))
 
-# ✅ Read and print DATABASE_URL
+# ✅ Read DATABASE_URL
 DATABASE_URL = os.getenv("DATABASE_URL")
 print(f"✅ DATABASE_URL from .env: {DATABASE_URL}")
 
-# ---------- App & Middleware ----------
+# ---------- App ----------
 app = FastAPI()
+
+# ✅ CORS (Local + Vercel)
+origins = [
+    "http://localhost:3000",
+    "https://your-frontend-name.vercel.app",  # replace with your Vercel domain
+]
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  # Allow all for development
+    allow_origins=origins,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
 
-# ---------- Database Setup ----------
+# ---------- Database ----------
 engine = create_engine(DATABASE_URL)
 SessionLocal = sessionmaker(bind=engine)
 Base = declarative_base()
@@ -79,6 +85,3 @@ def clear_behavior_logs():
     db.commit()
     db.close()
     return {"status": "cleared"}
-
-# Run command:
-# uvicorn backend.main:app --reload
