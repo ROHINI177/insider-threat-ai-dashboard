@@ -20,7 +20,7 @@ app = FastAPI()
 # ✅ CORS (Local + Vercel)
 origins = [
     "http://localhost:3000",
-    "https://your-frontend-name.vercel.app",  # replace with your Vercel domain
+    "https://insider-threat-ai-dashboard.vercel.app"
 ]
 
 app.add_middleware(
@@ -62,6 +62,11 @@ def get_db():
         yield db
     finally:
         db.close()
+
+# ---------- Root Route ----------
+@app.get("/")
+def root():
+    return {"message": "FastAPI backend is running!"}
 
 # ---------- API Routes ----------
 @app.post("/api/behavior")
