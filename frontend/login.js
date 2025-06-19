@@ -51,6 +51,7 @@ const Login = ({ onLogin }) => {
           className="mt-6 w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 rounded-md transition"
         >
           Log In
+          
         </button>
       </form>
     </div>

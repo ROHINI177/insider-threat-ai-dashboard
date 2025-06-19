@@ -1,19 +1,12 @@
 import React, { useEffect, useState } from "react";
 import RiskChart from "./RiskChart";
-import Login from "./Login";
 import RiskAlert from "./RiskAlert";
-import { LogOut } from "lucide-react"; // Optional icon
 
 function App() {
   const [logs, setLogs] = useState([]);
   const [alerts, setAlerts] = useState([]);
-  const [isAuthenticated, setIsAuthenticated] = useState(
-    localStorage.getItem("isAuthenticated") === "true"
-  );
 
   useEffect(() => {
-    if (!isAuthenticated) return;
-
     const fetchLogs = async () => {
       try {
         const res = await fetch("http://localhost:8000/api/behavior");
@@ -21,7 +14,6 @@ function App() {
         const reversed = data.reverse();
         setLogs(reversed);
 
-        // Detect risky logs
         const risky = reversed.filter(
           (log) => log.action === "delete" || log.file_size > 750
         );
@@ -36,11 +28,7 @@ function App() {
     fetchLogs();
     const interval = setInterval(fetchLogs, 3000);
     return () => clearInterval(interval);
-  }, [isAuthenticated]);
-
-  if (!isAuthenticated) {
-    return <Login onLogin={() => setIsAuthenticated(true)} />;
-  }
+  }, []);
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-100 to-white px-6 py-8 font-sans">
@@ -58,16 +46,6 @@ function App() {
         <h1 className="text-4xl font-bold text-gray-800 tracking-tight">
           🧠 Insider Threat Dashboard
         </h1>
-        <button
-          onClick={() => {
-            localStorage.removeItem("isAuthenticated");
-            setIsAuthenticated(false);
-          }}
-          className="flex items-center gap-2 bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-md transition-shadow shadow-sm hover:shadow-md"
-        >
-          <LogOut className="w-4 h-4" />
-          Logout
-        </button>
       </div>
 
       {/* User Logs Table */}
@@ -94,7 +72,6 @@ function App() {
                 } transition-all duration-150 hover:bg-blue-50`}
               >
                 <td className="py-2 px-4 border font-medium">{log.user_id}</td>
-
                 <td className="py-2 px-4 border">
                   <span
                     className={`inline-block px-2 py-1 rounded-full text-xs font-semibold ${
@@ -108,7 +85,6 @@ function App() {
                     {log.action}
                   </span>
                 </td>
-
                 <td className="py-2 px-4 border text-gray-600">
                   {new Date(log.timestamp).toLocaleString("en-IN", {
                     day: "2-digit",
@@ -118,11 +94,9 @@ function App() {
                     minute: "2-digit",
                   })}
                 </td>
-
                 <td className="py-2 px-4 border text-right tabular-nums">
                   {log.file_size} <span className="text-gray-400">KB</span>
                 </td>
-
                 <td className="py-2 px-4 border font-mono text-sm">{log.ip_address}</td>
               </tr>
             ))}
